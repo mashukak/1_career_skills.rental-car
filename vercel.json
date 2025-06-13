@@ -2,7 +2,6 @@
     "version": 2,
     "builds": [
       {
-        "src": "rental-car/**",
         "use": "@vercel/static-build",
         "config": {
           "distDir": "dist"

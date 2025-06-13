@@ -1,7 +1,11 @@
 {
     "scripts": {
-      "dev": "vite --root ./rental-car",
-      "build": "vite build --root ./rental-car",
-      "preview": "vite preview --root ./rental-car"
+        "dev": "vite --root ./rental-car",
+        "build": "vite build --root ./rental-car",
+        "preview": "vite preview --root ./rental-car"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react": "^4.5.2",
+        "vite": "^6.3.5"
     }
-  }
+}

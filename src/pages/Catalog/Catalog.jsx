@@ -16,6 +16,7 @@ export default function Catalog() {
   useEffect(() => {
     dispatch(fetchCars());
   }, [dispatch, filters, page]);
+  
 
   const handleLoadMore = useCallback(() => {
     if (!loading && items.length < total) {

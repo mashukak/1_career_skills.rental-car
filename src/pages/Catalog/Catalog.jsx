@@ -13,7 +13,7 @@ export default function Catalog() {
   const { items, loading, page, total, filters } = useSelector(state => state.cars);
 
   useEffect(() => {
-    dispatch(fetchCars());
+    dispatch(fetchCars({ page, filters }));
   }, [dispatch, filters, page]);
 
   const handleLoadMore = useCallback(() => {
@@ -21,8 +21,6 @@ export default function Catalog() {
       dispatch(incrementPage());
     }
   }, [loading, items.length, total, dispatch]);
-
-  const showLoadMore = !loading && items.length < total;
 
   return (
     <div>
@@ -38,19 +36,11 @@ export default function Catalog() {
 
         {loading && <Loader />}
 
-        {showLoadMore && (
+        {!loading && items.length < total && (
           <button
             onClick={handleLoadMore}
-            className={styles.loadMore}
-            style={{
-              fontFamily: 'Manrope',
-              fontWeight: 600,
-              fontSize: '16px',
-              lineHeight: '20px',
-              letterSpacing: '0%',
-              width: '80px',
-              height: '20px'
-            }}
+            className={styles.loadMoreButton}
+            disabled={loading}
           >
             Load More
           </button>

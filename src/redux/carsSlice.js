@@ -31,7 +31,7 @@ const carsSlice = createSlice({
     },
     incrementPage(state) {
       state.page += 1;
-    },
+    }
   },
   extraReducers: builder => {
     builder

@@ -3,28 +3,24 @@ import { api } from '../api/cars';
 
 export const fetchCars = createAsyncThunk(
   'cars/fetchCars',
-  async ({ page, filters }, { rejectWithValue }) => {
-    try {
-      const params = {
-        page,
-        limit: 12,
-        brand: filters.brand || undefined,
-        price: filters.price || undefined,
-        mileageFrom: filters.mileageFrom || undefined,
-        mileageTo: filters.mileageTo || undefined,
-      };
+  async (_, { getState }) => {
+    const { cars } = getState();
+    const params = {
+      page: cars.page,
+      limit: 12,
+      brand: cars.filters.brand || undefined,
+      price: cars.filters.price || undefined,
+      mileageFrom: cars.filters.mileageFrom || undefined,
+      mileageTo: cars.filters.mileageTo || undefined,
+    };
 
-      const response = await api.get('/cars', { params });
-      const data = response.data;
+    const { data } = await api.get('/cars', { params });
 
-      const normalizedCars = data.cars.map(car => ({
-        ...car,
-        id: car.id || car._id,
-      }));
+    const normalizedCars = data.cars.map(car => ({
+      ...car,
+      id: car.id || car._id,
+    }));
 
-      return { cars: normalizedCars, total: data.total };
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
+    return { cars: normalizedCars, total: data.total };
   }
 );

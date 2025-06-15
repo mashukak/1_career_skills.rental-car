@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCars } from '../../redux/carsThunks';
-import  incrementPage  from '../../redux/carsSlice';
+import { incrementPage } from '../../redux/carsSlice';
 import CarCard from '../../components/CarCard/CarCard';
 import Loader from '../../components/Loader/Loader';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -13,8 +13,7 @@ export default function Catalog() {
   const { items, loading, page, total, filters } = useSelector(state => state.cars);
 
   useEffect(() => {
-    // Запитати машини для поточної сторінки і фільтрів
-    dispatch(fetchCars({ page, filters }));
+    dispatch(fetchCars());
   }, [dispatch, filters, page]);
 
   const handleLoadMore = useCallback(() => {
@@ -22,6 +21,8 @@ export default function Catalog() {
       dispatch(incrementPage());
     }
   }, [loading, items.length, total, dispatch]);
+
+  const showLoadMore = !loading && items.length < total;
 
   return (
     <div>
@@ -37,11 +38,19 @@ export default function Catalog() {
 
         {loading && <Loader />}
 
-        {!loading && items.length < total && (
+        {showLoadMore && (
           <button
             onClick={handleLoadMore}
             className={styles.loadMore}
-            disabled={loading}
+            style={{
+              fontFamily: 'Manrope',
+              fontWeight: 600,
+              fontSize: '16px',
+              lineHeight: '20px',
+              letterSpacing: '0%',
+              width: '80px',
+              height: '20px'
+            }}
           >
             Load More
           </button>

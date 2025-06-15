@@ -5,31 +5,26 @@ export const fetchCars = createAsyncThunk(
   'cars/fetchCars',
   async (_, { getState }) => {
     const { cars } = getState();
+    const { page, filters } = cars;
 
-    const { data } = await api.get('/cars');
-    console.log('API response data:', data);
+    const { data } = await api.get('/cars'); // Візьми всі машини
+    const allCars = Array.isArray(data) ? data : data.cars || [];
 
-    const carsArray = Array.isArray(data) ? data : (data.cars || []);
-
-    const filteredCars = carsArray.filter(car => {
-      if (cars.filters.brand && car.make !== cars.filters.brand) return false;
-      if (cars.filters.price && Number(car.rentalPrice) > Number(cars.filters.price)) return false;
-      if (cars.filters.mileageFrom && Number(car.mileage) < Number(cars.filters.mileageFrom)) return false;
-      if (cars.filters.mileageTo && Number(car.mileage) > Number(cars.filters.mileageTo)) return false;
+    // 🔍 Фільтрація
+    const filteredCars = allCars.filter(car => {
+      if (filters.brand && car.make !== filters.brand) return false;
+      if (filters.price && Number(car.rentalPrice.replace('$', '')) > Number(filters.price)) return false;
       return true;
     });
 
-    const allCars = filteredCars.map(car => ({
-      ...car,
-      id: car.id || car._id,
-    }));
-
-    const endIndex = cars.page * 12;
-    const visibleCars = allCars.slice(0, endIndex);
+    const carsPerPage = 12;
+    const start = (page - 1) * carsPerPage;
+    const end = page * carsPerPage;
+    const visibleCars = filteredCars.slice(start, end);
 
     return {
       cars: visibleCars,
-      total: allCars.length,
+      total: filteredCars.length,
     };
   }
 );

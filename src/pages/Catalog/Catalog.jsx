@@ -2,6 +2,9 @@ import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCars } from '../../redux/carsThunks';
 import { incrementPage } from '../../redux/carsSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import CarCard from '../../components/CarCard/CarCard';
 import Loader from '../../components/Loader/Loader';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -13,23 +16,22 @@ export default function Catalog() {
   const dispatch = useDispatch();
   const { items, loading, page, total, filters } = useSelector(state => state.cars);
 
-  // 🧪 Debug info
-  console.log('Catalog render:');
-  console.log('Page:', page);
-  console.log('Items count:', items.length);
-  console.log('Total cars:', total);
-  console.log('Loading:', loading);
-  console.log('Filters:', filters);
-
   useEffect(() => {
     dispatch(fetchCars());
   }, [dispatch, filters, page]);
 
   const handleLoadMore = useCallback(() => {
-    if (!loading && items.length < total) {
+    if (loading) return;
+
+    if (items.length < total) {
       dispatch(incrementPage());
+    } else {
+      toast.info('🚗 Усі машини вже завантажено!', {
+        position: 'bottom-center',
+        autoClose: 3000,
+      });
     }
-  }, [loading, items.length, total, dispatch]);
+  }, [dispatch, items.length, total, loading]);
 
   return (
     <div>
@@ -38,17 +40,17 @@ export default function Catalog() {
         <FilterBar />
 
         <section className={styles.carGrid}>
+          {items.length === 0 && !loading && <p>No cars found.</p>}
           {items.map(car => (
             <CarCard key={car.id} car={car} />
           ))}
         </section>
 
         {loading && <Loader />}
-
-        {!loading && items.length < total && (
-          <LoadMoreButton onClick={handleLoadMore} disabled={loading} />
-        )}
+        <LoadMoreButton onClick={handleLoadMore} disabled={loading} />
       </main>
+
+      <ToastContainer />
     </div>
   );
 }

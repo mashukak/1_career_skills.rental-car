@@ -13,10 +13,13 @@ export default function FilterBar() {
   const handleSubmit = e => {
     e.preventDefault();
     dispatch(setFilters({
-      brand, price, mileageFrom: mFrom, mileageTo: mTo,
+      brand,
+      price,
+      mileageFrom: mFrom,
+      mileageTo: mTo,
     }));
   };
-
+  
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <select value={brand} onChange={e => setBrand(e.target.value)}>

@@ -18,7 +18,7 @@ const carsSlice = createSlice({
     setFilters(state, action) {
       state.filters = action.payload;
       state.page = 1;
-      state.items = []; // очищаємо машини при зміні фільтрів
+      state.items = [];
     },
     clearCars(state) {
       state.items = [];
@@ -34,13 +34,9 @@ const carsSlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.loading = false;
-        // Якщо page === 1, замінюємо масив
-        if (state.page === 1) {
-          state.items = action.payload.cars;
-        } else {
-          // Якщо наступна сторінка — додаємо до списку
-          state.items = [...state.items, ...action.payload.cars];
-        }
+        // Оскільки ми завантажуємо всі машини, а потім slice,
+        // просто замінюємо items новим шматком visibleCars
+        state.items = action.payload.cars;
         state.total = action.payload.total;
       })
       .addCase(fetchCars.rejected, (state, action) => {

@@ -6,6 +6,7 @@ import CarCard from '../../components/CarCard/CarCard';
 import Loader from '../../components/Loader/Loader';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Header from '../../components/Header/Header';
+import LoadMoreButton from '../../components/LoadMoreButton/LoadMoreButton';
 import styles from './Catalog.module.css';
 
 export default function Catalog() {
@@ -13,7 +14,7 @@ export default function Catalog() {
   const { items, loading, page, total, filters } = useSelector(state => state.cars);
 
   useEffect(() => {
-    dispatch(fetchCars({ page, filters }));
+    dispatch(fetchCars());
   }, [dispatch, filters, page]);
 
   const handleLoadMore = useCallback(() => {
@@ -27,7 +28,6 @@ export default function Catalog() {
       <Header />
       <main className={styles.catalog}>
         <FilterBar />
-
         <section className={styles.carGrid}>
           {items.map(car => (
             <CarCard key={car.id} car={car} />
@@ -37,13 +37,7 @@ export default function Catalog() {
         {loading && <Loader />}
 
         {!loading && items.length < total && (
-          <button
-            onClick={handleLoadMore}
-            className={styles.loadMoreButton}
-            disabled={loading}
-          >
-            Load More
-          </button>
+          <LoadMoreButton onClick={handleLoadMore} disabled={loading} />
         )}
       </main>
     </div>

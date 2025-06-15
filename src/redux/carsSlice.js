@@ -32,8 +32,7 @@ const carsSlice = createSlice({
     incrementPage(state) {
       state.page += 1;
     },
-},
-  
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchCars.pending, state => {
@@ -42,25 +41,10 @@ const carsSlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.loading = false;
-      
         const { cars, total } = action.payload;
-      
-        if (Array.isArray(cars)) {
-          if (state.page === 1) {
-            // Якщо це перша сторінка — замінюємо список
-            state.items = cars;
-          } else {
-            // Якщо не перша — додаємо до існуючих
-            state.items = [...state.items, ...cars];
-          }
-          state.total = total;
-          state.page += 1;
-        } else {
-          console.error('⚠️ fetchCars.fulfilled отримав НЕ масив cars:', action.payload);
-          state.error = 'Invalid cars format from server';
-        }
+        state.items = [...state.items, ...cars];
+        state.total = total;
       })
-      
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
@@ -68,5 +52,5 @@ const carsSlice = createSlice({
   },
 });
 
-export const { setFilters, clearCars } = carsSlice.actions;
+export const { setFilters, clearCars, incrementPage } = carsSlice.actions;
 export default carsSlice.reducer;

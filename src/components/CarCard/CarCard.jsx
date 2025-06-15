@@ -1,20 +1,38 @@
-import { useDispatch } from 'react-redux'
-import { addToFavorites } from '../../redux/favoritesSlice'
+import { Link } from 'react-router-dom';
+import styles from './CarCard.module.css';
 
 export default function CarCard({ car }) {
-  const dispatch = useDispatch()
+  if (!car) return null;
 
-  const formatMileage = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-  }
+  const {
+    id,
+    img = '',
+    make = '',
+    model = '',
+    rentalPrice = 0,
+    address = ''
+  } = car;
 
   return (
-    <div className="car-card">
-      <img src={car.img} alt={car.make} />
-      <button onClick={() => dispatch(addToFavorites(car))}>❤️</button>
-      <h3>{car.make} {car.model}</h3>
-      <p>Price: ${car.rentalPrice}</p>
-      <p>Mileage: {formatMileage(car.mileage)} km</p>
+    <div className={styles.card}>
+      {img && (
+        <img
+          src={img}
+          alt={`${make} ${model}`}
+          className={styles.image}
+          onError={e => { e.target.style.display = 'none'; }}
+        />
+      )}
+      <div className={styles.info}>
+        <h3>{make} {model}</h3>
+        <p className={styles.price}>${rentalPrice}</p>
+      </div>
+      <p className={styles.address}>{address}</p>
+      {id && (
+        <Link to={`/catalog/${id}`} className={styles.detailsBtn}>
+          View details
+        </Link>
+      )}
     </div>
-  )
+  );
 }

@@ -1,0 +1,57 @@
+header {
+
+    height: 68px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 120px;
+    border-bottom: 1px solid rgba(242, 244, 247, 1);
+    background-color: rgba(242, 244, 247, 1);    ;
+    box-sizing: border-box;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    font-family: sans-serif;
+}
+
+header .logo .rental {
+    color: rgba(16, 24, 40, 1)
+}
+
+header .logo .car {
+    color: rgba(52, 112, 255, 1);
+    display: flex;
+    align-items: center;
+
+}
+
+header nav {
+    display: flex;
+}
+
+header nav a {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center; 
+    color: rgba(16, 24, 40, 1);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    transition: background-color 0.3s ease;
+}
+
+header nav a.active {
+    color: rgba(11, 68, 205, 1);
+}

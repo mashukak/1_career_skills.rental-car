@@ -12,6 +12,7 @@ export default function FilterBar() {
 
   const handleSubmit = e => {
     e.preventDefault();
+    console.log('[FilterBar] Submit filters:', { brand, price, mileageFrom: mFrom, mileageTo: mTo });
     dispatch(setFilters({
       brand,
       price,
@@ -19,11 +20,11 @@ export default function FilterBar() {
       mileageTo: mTo,
     }));
   };
-  
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <select value={brand} onChange={e => setBrand(e.target.value)}>
-        <option value="" disabled>Choose a brand</option>
+        <option value="">Choose a brand</option>
         <option value="Aston Martin">Aston Martin</option>
         <option value="Audi">Audi</option>
         <option value="BMW">BMW</option>
@@ -38,10 +39,11 @@ export default function FilterBar() {
       </select>
 
       <select value={price} onChange={e => setPrice(e.target.value)}>
-        <option value="" disabled>Choose a price</option>
+        <option value="">Choose a price</option>
         {Array.from({ length: 13 }, (_, i) => (30 + i * 10)).map(p => (
           <option key={p} value={p}>{p}</option>
         ))}
+        
       </select>
 
       <input

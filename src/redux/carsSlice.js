@@ -25,13 +25,9 @@ const carsSlice = createSlice({
       state.items = [];
       state.total = 0;
     },
-    clearCars(state) {
-      state.items = [];
-      state.page = 1;
-    },
     incrementPage(state) {
       state.page += 1;
-    }
+    },
   },
   extraReducers: builder => {
     builder
@@ -42,7 +38,13 @@ const carsSlice = createSlice({
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.loading = false;
         const { cars, total } = action.payload;
-        state.items = [...state.items, ...cars];
+
+        if (state.page === 1) {
+          state.items = cars;
+        } else {
+          state.items = [...state.items, ...cars];
+        }
+
         state.total = total;
       })
       .addCase(fetchCars.rejected, (state, action) => {
@@ -52,5 +54,5 @@ const carsSlice = createSlice({
   },
 });
 
-export const { setFilters, clearCars, incrementPage } = carsSlice.actions;
+export const { setFilters, incrementPage } = carsSlice.actions;
 export default carsSlice.reducer;

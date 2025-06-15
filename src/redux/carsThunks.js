@@ -16,13 +16,6 @@ export const fetchCars = createAsyncThunk(
 
     const { data } = await api.get('/cars', { params });
 
-    console.log('API response data:', data);
-
-    // Перевірка даних, щоб уникнути помилок
-    if (!data || !data.cars || !Array.isArray(data.cars)) {
-      throw new Error('Invalid data format from API');
-    }
-
     const normalizedCars = data.cars.map(car => ({
       ...car,
       id: car.id || car._id,

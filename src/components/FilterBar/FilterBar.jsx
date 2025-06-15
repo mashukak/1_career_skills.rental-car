@@ -13,10 +13,7 @@ export default function FilterBar() {
   const handleSubmit = e => {
     e.preventDefault();
     dispatch(setFilters({
-      brand,
-      price,
-      mileageFrom: mFrom,
-      mileageTo: mTo,
+      brand, price, mileageFrom: mFrom, mileageTo: mTo,
     }));
   };
 

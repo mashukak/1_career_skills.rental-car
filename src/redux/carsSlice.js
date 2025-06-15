@@ -1,32 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchCars } from './carsThunks';
 
-const initialState = {
-  items: [],
-  page: 1,
-  total: 0,
-  loading: false,
-  error: null,
-  filters: {
-    brand: '',
-    price: '',
-    mileageFrom: '',
-    mileageTo: '',
-  },
-};
-
 const carsSlice = createSlice({
   name: 'cars',
-  initialState,
+  initialState: {
+    items: [],
+    loading: false,
+    error: null,
+    page: 1,
+    total: 0,
+    filters: {},
+  },
   reducers: {
+    incrementPage(state) {
+      state.page += 1;
+    },
     setFilters(state, action) {
       state.filters = action.payload;
       state.page = 1;
-      state.items = [];
-      state.total = 0;
+      state.items = []; // очищаємо машини при зміні фільтрів
     },
-    incrementPage(state) {
-      state.page += 1;
+    clearCars(state) {
+      state.items = [];
+      state.page = 1;
+      state.total = 0;
     },
   },
   extraReducers: builder => {
@@ -37,15 +34,14 @@ const carsSlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.loading = false;
-        const { cars, total } = action.payload;
-
+        // Якщо page === 1, замінюємо масив
         if (state.page === 1) {
-          state.items = cars;
+          state.items = action.payload.cars;
         } else {
-          state.items = [...state.items, ...cars];
+          // Якщо наступна сторінка — додаємо до списку
+          state.items = [...state.items, ...action.payload.cars];
         }
-
-        state.total = total;
+        state.total = action.payload.total;
       })
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;
@@ -54,5 +50,6 @@ const carsSlice = createSlice({
   },
 });
 
-export const { setFilters, incrementPage } = carsSlice.actions;
+export const { incrementPage, setFilters, clearCars } = carsSlice.actions;
+
 export default carsSlice.reducer;

@@ -13,10 +13,17 @@ export default function Catalog() {
   const dispatch = useDispatch();
   const { items, loading, page, total, filters } = useSelector(state => state.cars);
 
+  // 🧪 Debug info
+  console.log('Catalog render:');
+  console.log('Page:', page);
+  console.log('Items count:', items.length);
+  console.log('Total cars:', total);
+  console.log('Loading:', loading);
+  console.log('Filters:', filters);
+
   useEffect(() => {
     dispatch(fetchCars());
   }, [dispatch, filters, page]);
-  
 
   const handleLoadMore = useCallback(() => {
     if (!loading && items.length < total) {
@@ -29,6 +36,7 @@ export default function Catalog() {
       <Header />
       <main className={styles.catalog}>
         <FilterBar />
+
         <section className={styles.carGrid}>
           {items.map(car => (
             <CarCard key={car.id} car={car} />

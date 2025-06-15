@@ -5,22 +5,31 @@ export const fetchCars = createAsyncThunk(
   'cars/fetchCars',
   async (_, { getState }) => {
     const { cars } = getState();
-    const params = {
-      page: cars.page,
-      limit: 12,
-      brand: cars.filters.brand || undefined,
-      price: cars.filters.price || undefined,
-      mileageFrom: cars.filters.mileageFrom ? Number(cars.filters.mileageFrom) : undefined,
-      mileageTo: cars.filters.mileageTo ? Number(cars.filters.mileageTo) : undefined,
-    };
 
-    const { data } = await api.get('/cars', { params });
+    const { data } = await api.get('/cars');
+    console.log('API response data:', data);
 
-    const normalizedCars = data.cars.map(car => ({
+    const carsArray = Array.isArray(data) ? data : (data.cars || []);
+
+    const filteredCars = carsArray.filter(car => {
+      if (cars.filters.brand && car.make !== cars.filters.brand) return false;
+      if (cars.filters.price && Number(car.rentalPrice) > Number(cars.filters.price)) return false;
+      if (cars.filters.mileageFrom && Number(car.mileage) < Number(cars.filters.mileageFrom)) return false;
+      if (cars.filters.mileageTo && Number(car.mileage) > Number(cars.filters.mileageTo)) return false;
+      return true;
+    });
+
+    const allCars = filteredCars.map(car => ({
       ...car,
       id: car.id || car._id,
     }));
 
-    return { cars: normalizedCars, total: data.total || 0 };
+    const endIndex = cars.page * 12;
+    const visibleCars = allCars.slice(0, endIndex);
+
+    return {
+      cars: visibleCars,
+      total: allCars.length,
+    };
   }
 );

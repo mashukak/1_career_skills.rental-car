@@ -9,8 +9,18 @@ export default function CarCard({ car }) {
     img = '',
     make = '',
     model = '',
-    rentalPrice = 0,
-    address = ''
+    year = '',
+    rentalPrice = '',
+    address = '',
+    type = '',
+    mileage = '',
+    fuelConsumption = '',
+    engineSize = '',
+    rentalCompany = '',
+    functionalities = [],
+    description = '',
+    accessories = '',
+    transmission = '',
   } = car;
 
   return (
@@ -23,11 +33,23 @@ export default function CarCard({ car }) {
           onError={e => { e.target.style.display = 'none'; }}
         />
       )}
+
       <div className={styles.info}>
-        <h3>{make} {model}</h3>
-        <p className={styles.price}>${rentalPrice}</p>
+        <div className={styles.titleRow}>
+          <h3 className={styles.title}>{make} <span>{model}, {year}</span></h3>
+          <span className={styles.price}>{rentalPrice}</span>
+        </div>
+
+        <ul className={styles.details}>
+          <li>{address}</li>
+          <li>{type}</li>
+          <li>{mileage} miles</li>
+          <li>{fuelConsumption}</li>
+          <li>{engineSize}</li>
+          <li>{transmission}</li>
+        </ul>
       </div>
-      <p className={styles.address}>{address}</p>
+
       {id && (
         <Link to={`/catalog/${id}`} className={styles.detailsBtn}>
           View details

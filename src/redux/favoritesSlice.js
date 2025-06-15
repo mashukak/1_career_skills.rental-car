@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Завантажуємо збережені обрані авто
 const loadFavorites = () => {
   const saved = localStorage.getItem('favorites');
   return saved ? JSON.parse(saved) : [];
